@@ -26,18 +26,36 @@ namespace AuthExamples2
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
-            services.AddRazorPages();
-            services.AddDbContext<MyDbContext>(config => {
-                config.UseInMemoryDatabase("inMemoryDatabase");
-            });
+            services.AddDbContext<MyDbContext>(
+                config =>
+                {
+                    config.UseInMemoryDatabase("inMemoryDatabase");
+                }
+            );
 
             //Registers services
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services
+                .AddIdentity<IdentityUser, IdentityRole>(
+                    config =>
+                    {
+                        config.Password.RequireDigit = false;
+                        config.Password.RequiredLength = 4;
+                        config.Password.RequireNonAlphanumeric = false;
+                        config.Password.RequireUppercase = false;
+                    }
+                )
                 .AddEntityFrameworkStores<MyDbContext>()
                 .AddDefaultTokenProviders();
-        }
 
+            services.ConfigureApplicationCookie(
+                config =>
+                {
+                    config.Cookie.Name = "Identity.Cookie";
+                    config.LoginPath = "/home/login";
+                }
+            );
+            services.AddControllersWithViews();
+        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -57,14 +75,17 @@ namespace AuthExamples2
             app.UseStaticFiles();
 
             app.UseRouting();
-
-            app.UseAuthorization();
+            //who are you
             app.UseAuthentication();
+            //are you allowed
+            app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapDefaultControllerRoute();
-            });
+            app.UseEndpoints(
+                endpoints =>
+                {
+                    endpoints.MapDefaultControllerRoute();
+                }
+            );
         }
     }
 }
