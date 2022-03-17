@@ -50,7 +50,7 @@ builder.Services.AddAuthentication(options =>
     options.SaveTokens=true;
     options.Events=new OpenIdConnectEvents(){
         OnTokenValidated=async context=>{
-            if(context.Principal.Claims.FirstOrDefault(x=>x.Type==ClaimTypes.NameIdentifier).Value=="108047269108307068458"){
+            if(context.Principal.Claims.FirstOrDefault(x=>x.Type==ClaimTypes.NameIdentifier).Value=="xxxxxxxxxxxxxxxxxxxxxxxxx"){
                     var claim=new Claim(ClaimTypes.Role,"Admin");
                     var claimIdentity= context.Principal.Identity as ClaimsIdentity;
                     claimIdentity.AddClaim(claim);
