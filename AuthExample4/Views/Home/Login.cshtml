@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "Login Page";
+    var returnUrl=ViewData["returnUrl"] as string;
+    var error=TempData["Error"] as string;
+}
+
+<div class="text-center">
+    <h1 class="display-4">Login Page</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+<div>
+    <div class="text-danger p-4">
+        @if(!string.IsNullOrEmpty(error)){
+            <h3>@error</h3>
+        }
+    </div>
+    <form action="/login?ReturnUrl=@System.Net.WebUtility.UrlEncode(returnUrl)" method="post" >
+        <input type="text" name="username">
+        <input type="password" name="password">
+        <button>Login</button>
+    </form>
+</div>
